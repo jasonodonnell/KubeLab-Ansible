@@ -1,0 +1,19 @@
+---
+- hosts: kube-nfs
+  roles:
+  - common
+  - nfs-server
+
+- hosts: kube-masters 
+  roles:
+  - common
+  - nfs-client
+  - kube-base
+  - kube-master
+
+- hosts: kube-nodes
+  roles:
+  - common
+  - nfs-client
+  - kube-base
+  - kube-node

@@ -1,0 +1,31 @@
+---
+- name: Ensure SSH Directories
+  become: yes
+  file:
+    path: /home/vagrant/.ssh
+    state: directory
+    owner: vagrant
+    group: vagrant
+    mode: 0700
+
+- name: Copy SSH Key Files
+  become: yes
+  copy:
+    src: files/{{ item }}
+    dest: /home/vagrant/.ssh/{{ item }}
+    owner: vagrant
+    group: vagrant
+    mode: 0600
+  with_items:
+    - id_rsa
+    - id_rsa.pub
+    - config
+
+- name: Install Extra Packages
+  become: yes
+  yum: name={{item}} state=installed
+  with_items:
+  - golang
+  - git
+  - net-tools
+  - bind-utils

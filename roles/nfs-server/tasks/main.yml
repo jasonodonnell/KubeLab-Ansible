@@ -1,0 +1,45 @@
+---
+- name: Ensure SSH Directories
+  become: yes
+  file:
+    path: /nfsfileshare
+    state: directory
+    owner: nfsnobody
+    group: nfsnobody
+    mode: 0777
+
+- name: Install NFS Server Packages
+  become: yes
+  yum: name={{item}} state=installed
+  with_items:
+  - nfs-utils
+  - libnfsidmap
+
+- name: Copy Exports
+  become: yes
+  copy:
+    src: files/exports
+    dest: /etc/exports
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable NFS-Server
+  become: yes
+  service:
+    name: "{{ item }}"
+    enabled: yes
+    with_items:
+    - rpcbind
+    - nfs-server
+
+- name: Start NFS-Server
+  become: yes
+  service:
+    name: "{{ item }}"
+    state: started
+    with_items:
+    - rpcbind
+    - nfs-server
+    - rpc-statd
+    - nfs-idmapd

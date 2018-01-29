@@ -1,0 +1,49 @@
+---
+- name: Disable Swap
+  become: yes
+  command: swapoff --all
+  ignore_errors: yes
+
+- name: Ensure Authorized SSH Key
+  become: yes
+  authorized_key:
+    user: ubuntu
+    key:  "{{ lookup('file', '/home/vagrant/.ssh/id_rsa.pub') }}"
+    state: present
+
+- name: Copy Kubernetes Repo File
+  become: yes
+  copy:
+    src: files/kubernetes.repo
+    dest: /etc/yum.repos.d/kubernetes.repo
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Install Kubernetes
+  become: yes
+  yum: name={{item}} state=installed
+  with_items:
+  - docker
+  - kubelet 
+  - kubectl
+  - kubeadm
+
+- name: Ensure Docker Group
+  group:
+    name: docker
+    state: present
+
+- name: Ensure User in Docker Group
+  user:
+    name=vagrant
+    groups=docker
+    append=yes
+
+- name: Ensure IPTables Aren't Ignored
+  sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
