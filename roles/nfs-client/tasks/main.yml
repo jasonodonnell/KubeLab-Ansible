@@ -26,3 +26,11 @@
   service:
     name: "rpcbind"
     state: started
+
+- name: Mount NFS
+  mount: 
+    src: "kube-nfs:/nfsfileshare"
+    name: /mnt/nfsfileshare
+    fstype: nfs
+    opts: "vers=rw,sync,hard,intr 0 0"
+    state: mounted

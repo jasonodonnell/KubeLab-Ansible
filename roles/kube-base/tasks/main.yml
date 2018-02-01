@@ -47,3 +47,15 @@
     sysctl_set: yes
     state: present
     reload: yes
+
+- name: Create .kube directory:
+    path: /home/vagrant/.kube
+    state: directory
+    mode: 0700
+
+- name: Enable and Start Kubelet
+  become: yes
+  service:
+    name: "kubelet"
+    enabled: yes
+    started: yes

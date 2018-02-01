@@ -1,0 +1,12 @@
+---
+- name: Copy Kubeconfig From Mount
+  copy:
+    src: /mnt/nfsfileshare/admin.conf
+    dest: /home/vagrant/.kube/config
+    owner: vagrant
+    group: vagrant
+    mode: 0644
+
+- name: Run kubeadm init
+  shell: >
+    kubeadm join --token={{ kube_token }} --discovery-token-unsafe-skip-ca-verification

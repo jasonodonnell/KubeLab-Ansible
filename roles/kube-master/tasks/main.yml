@@ -1,0 +1,31 @@
+---
+- name: Enable and Start Kubelet
+  become: yes
+  service:
+    name: "kubelet"
+    enabled: yes
+    started: yes
+
+- name: Run kubeadm init
+  shell: >
+    kubeadm init --token={{ kube_token }} --pod-network-cidr={{ kube_network }}
+
+- name: Apply Flannel Overlay
+  shell: >
+    kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+
+- name: Copy Kubeconfig To Mount
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /mnt/nfsfileshare
+    owner: vagrant
+    group: vagrant
+    mode: 0644
+
+- name: Copy Kubeconfig To Home
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /home/vagrant/.kube/config
+    owner: vagrant
+    group: vagrant
+    mode: 0644
