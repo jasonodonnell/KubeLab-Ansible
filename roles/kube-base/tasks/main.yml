@@ -4,13 +4,6 @@
   command: swapoff --all
   ignore_errors: yes
 
-- name: Ensure Authorized SSH Key
-  become: yes
-  authorized_key:
-    user: ubuntu
-    key:  "{{ lookup('file', '/home/vagrant/.ssh/id_rsa.pub') }}"
-    state: present
-
 - name: Copy Kubernetes Repo File
   become: yes
   copy:
@@ -22,7 +15,9 @@
 
 - name: Install Kubernetes
   become: yes
-  yum: name={{item}} state=installed
+  yum: 
+    name: "{{ item }}"
+    state: installed
   with_items:
   - docker
   - kubelet 
@@ -30,25 +25,29 @@
   - kubeadm
 
 - name: Ensure Docker Group
+  become: yes
   group:
     name: docker
     state: present
 
 - name: Ensure User in Docker Group
+  become: yes
   user:
     name=vagrant
     groups=docker
     append=yes
 
-- name: Ensure IPTables Aren't Ignored
-  sysctl:
-    name: net.bridge.bridge-nf-call-iptables
-    value: 1
-    sysctl_set: yes
-    state: present
-    reload: yes
+- name: Copy k8s.conf
+  become: yes
+  copy:
+    src: files/k8s.conf
+    dest: /etc/sysctl.d/k8s.conf
+    owner: root
+    group: root
+    mode: 0644
 
-- name: Create .kube directory:
+- name: Create .kube directory
+  file:
     path: /home/vagrant/.kube
     state: directory
     mode: 0700
@@ -58,4 +57,31 @@
   service:
     name: "kubelet"
     enabled: yes
-    started: yes
+    state: started
+
+- name: Enable and Start Docker
+  become: yes
+  service:
+    name: "docker"
+    enabled: yes
+    state: started
+
+- name: Pass bridged IPv4 traffic to iptables
+  become: yes
+  shell: >
+    sysctl net.bridge.bridge-nf-call-iptables=1
+
+- name: Pass bridged IPv6 traffic to iptables
+  become: yes
+  shell: >
+    sysctl net.bridge.bridge-nf-call-ip6tables=1
+
+- name: Refresh Kernel Settings
+  become: yes
+  shell: >
+    sysctl --system
+
+- name: Disable SELinux
+  become: yes
+  shell: >
+    setenforce 0

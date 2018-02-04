@@ -1,4 +1,19 @@
 ---
+- name: Create nfsnobody Group
+  become: yes
+  group:
+    name: nfsnobody
+    gid: 65534
+    state: present
+
+- name: Create nfsnobody User
+  become: yes
+  user:
+    name: nfsnobody
+    comment: "NFS user"
+    uid: 65534
+    group: nfsnobody
+
 - name: Ensure SSH Directories
   become: yes
   file:
@@ -10,7 +25,9 @@
 
 - name: Install NFS Server Packages
   become: yes
-  yum: name={{item}} state=installed
+  yum: 
+    name: "{{ item }}"
+    state: installed
   with_items:
   - nfs-utils
   - libnfsidmap
@@ -28,9 +45,10 @@
     state: started
 
 - name: Mount NFS
+  become: yes
   mount: 
     src: "kube-nfs:/nfsfileshare"
     name: /mnt/nfsfileshare
     fstype: nfs
-    opts: "vers=rw,sync,hard,intr 0 0"
+    opts: "rw,hard,intr,auto"
     state: mounted

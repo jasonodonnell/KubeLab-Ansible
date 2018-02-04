@@ -1,4 +1,19 @@
 ---
+- name: Create nfsnobody Group
+  become: yes
+  group:
+    name: nfsnobody
+    gid: 65534
+    state: present
+
+- name: Create nfsnobody User
+  become: yes
+  user:
+    name: nfsnobody
+    comment: "NFS user"
+    uid: 65534
+    group: nfsnobody 
+
 - name: Ensure SSH Directories
   become: yes
   file:
@@ -10,36 +25,38 @@
 
 - name: Install NFS Server Packages
   become: yes
-  yum: name={{item}} state=installed
+  yum: 
+    name: "{{ item }}"
+    state: installed
   with_items:
   - nfs-utils
   - libnfsidmap
 
-- name: Copy Exports
+- name: Create NFS Exports
   become: yes
-  copy:
-    src: files/exports
+  template:
+    src: exports.j2
     dest: /etc/exports
     owner: root
     group: root
     mode: 0644
-
+  
 - name: Enable NFS-Server
   become: yes
   service:
     name: "{{ item }}"
     enabled: yes
-    with_items:
-    - rpcbind
-    - nfs-server
+  with_items:
+  - rpcbind
+  - nfs-server
 
 - name: Start NFS-Server
   become: yes
   service:
     name: "{{ item }}"
     state: started
-    with_items:
-    - rpcbind
-    - nfs-server
-    - rpc-statd
-    - nfs-idmapd
+  with_items:
+  - rpcbind
+  - nfs-server
+  - rpc-statd
+  - nfs-idmapd

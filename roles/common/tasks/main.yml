@@ -18,8 +18,17 @@
     mode: 0600
   with_items:
     - id_rsa
-    - id_rsa.pub
     - config
+    - authorized_keys 
+
+- name: Ensure SSH Directories
+  become: yes
+  file:
+    path: /home/vagrant/.ssh/id_rsa
+    state: file
+    owner: vagrant
+    group: vagrant
+    mode: 0400
 
 - name: Install Extra Packages
   become: yes
@@ -29,3 +38,10 @@
   - git
   - net-tools
   - bind-utils
+
+- name: Disable and Stop Firewalld
+  become: yes
+  service:
+    name: "firewalld"
+    enabled: no
+    state: stopped

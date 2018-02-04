@@ -1,10 +1,17 @@
 ---
 - hosts: kube-nfs
+  vars:
+    nfs_export_ip: "192.168.1.0/24"
   roles:
   - common
   - nfs-server
 
 - hosts: kube-masters 
+  vars:
+    kube_token: "e6aedd.1ffbc1ff421d950d" 
+    kube_network: "10.244.0.0/16"
+    kube_advertise: "192.168.1.64"
+    flannel_url: "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
   roles:
   - common
   - nfs-client
@@ -12,6 +19,9 @@
   - kube-master
 
 - hosts: kube-nodes
+  vars:
+    kube_token: "e6aedd.1ffbc1ff421d950d" 
+    kube_advertise: "192.168.1.64"
   roles:
   - common
   - nfs-client
