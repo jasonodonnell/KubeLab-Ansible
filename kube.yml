@@ -12,6 +12,7 @@
     kube_network: "10.244.0.0/16"
     kube_advertise: "192.168.1.64"
     flannel_url: "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
+    nfs_server_ip: "kube-nfs"
   roles:
   - common
   - nfs-client

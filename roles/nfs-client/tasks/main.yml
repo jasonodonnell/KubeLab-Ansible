@@ -47,7 +47,7 @@
 - name: Mount NFS
   become: yes
   mount: 
-    src: "kube-nfs:/nfsfileshare"
+    src: "{{ nfs_server_ip }}:/nfsfileshare"
     name: /mnt/nfsfileshare
     fstype: nfs
     opts: "rw,hard,intr,auto"
