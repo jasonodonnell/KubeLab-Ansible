@@ -4,6 +4,13 @@
   command: swapoff --all
   ignore_errors: yes
 
+- name: Remove swapfile from /etc/fstab
+  become: yes
+  mount:
+    name: swap
+    fstype: swap
+    state: absent
+
 - name: Copy Kubernetes Repo File
   become: yes
   copy:
