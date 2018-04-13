@@ -1,14 +1,14 @@
 [all:vars]
 ansible_connection=ssh 
-ansible_ssh_user=vagrant 
-ansible_ssh_private_key_file=~/.ssh/vms
+ansible_ssh_user=vagrant
+ansible_ssh_private_key_file=./keys/id_rsa
 ansible_become_pass=vagrant
 
 [nfs-server]
-kube-nfs
+192.168.2.20
 
 [kube-masters]
-kube1
+192.168.2.21
 
 [kube-nodes]
-kube2
+192.168.2.22

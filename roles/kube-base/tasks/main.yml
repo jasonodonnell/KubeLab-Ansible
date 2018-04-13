@@ -1,4 +1,10 @@
 ---
+- name: Set SELinux to Permissive
+  become: yes
+  selinux:
+    policy: targeted
+    state: permissive
+
 - name: Disable Swap
   become: yes
   command: swapoff --all
@@ -26,23 +32,9 @@
     name: "{{ item }}"
     state: installed
   with_items:
-  - docker
   - kubelet 
   - kubectl
   - kubeadm
-
-- name: Ensure Docker Group
-  become: yes
-  group:
-    name: docker
-    state: present
-
-- name: Ensure User in Docker Group
-  become: yes
-  user:
-    name=vagrant
-    groups=docker
-    append=yes
 
 - name: Copy k8s.conf
   become: yes
@@ -66,13 +58,6 @@
     enabled: yes
     state: started
 
-- name: Enable and Start Docker
-  become: yes
-  service:
-    name: "docker"
-    enabled: yes
-    state: started
-
 - name: Pass bridged IPv4 traffic to iptables
   become: yes
   shell: >
@@ -87,8 +72,3 @@
   become: yes
   shell: >
     sysctl --system
-
-- name: Disable SELinux
-  become: yes
-  shell: >
-    setenforce 0

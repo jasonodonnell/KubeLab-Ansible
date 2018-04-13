@@ -1,9 +1,17 @@
 ---
-- name: Run kubeadm init
+- name: Run kubeadm init with Weave Overlay
   become: yes
-  command: kubeadm init --token={{ kube_token }} --pod-network-cidr={{ kube_network }}
+  command: kubeadm init --token={{ kube_token }} --apiserver-advertise-address={{ kube_advertise }}
   args:
     creates: /etc/.kubeadminit
+  when: overlay == 'weave'
+
+- name: Run kubeadm init with Flannel Overlay
+  become: yes
+  command: kubeadm init --token={{ kube_token }} --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address={{ kube_advertise }}
+  args:
+    creates: /etc/.kubeadminit
+  when: overlay == 'flannel' 
 
 - name: Block kubeadm init
   become: yes
@@ -25,11 +33,6 @@
     group: vagrant
     mode: 0644
 
-- name: Apply Flannel Overlay
-  command: kubectl apply -f {{ flannel_url }}
-  args:
-    creates: /etc/.flannel
-
-- name: Block flannel
-  become: yes
-  command: touch /etc/.flannel
+- name: Get Kubectl Version
+  shell: kubectl version | base64 | tr -d '\n'
+  register: kubectl_version

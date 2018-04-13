@@ -1,0 +1,33 @@
+---
+- name: Install Docker
+  become: yes
+  yum: 
+    name: "{{ item }}"
+    state: installed
+  with_items:
+  - docker
+
+- name: Ensure Docker Group
+  become: yes
+  group:
+    name: docker
+    state: present
+
+- name: Ensure User in Docker Group
+  become: yes
+  user:
+    name=vagrant
+    groups=docker
+    append=yes
+
+- name: Enable and Start Docker
+  become: yes
+  service:
+    name: "docker"
+    enabled: yes
+    state: started
+
+- name: Disable SELinux
+  become: yes
+  shell: >
+    setenforce 0

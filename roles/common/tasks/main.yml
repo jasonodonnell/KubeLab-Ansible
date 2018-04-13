@@ -8,6 +8,19 @@
     group: vagrant
     mode: 0700
 
+- name: Ensure Authorized Keys
+  become: yes
+  file:
+    path: /home/vagrant/.ssh/authorized_keys
+    state: file
+    owner: vagrant
+    group: vagrant
+    mode: 0600
+
+- name: Make copy of current authorized_keys (vagrant)
+  become: yes
+  command: cp /home/vagrant/.ssh/authorized_keys /tmp/authorized_keys
+
 - name: Copy SSH Key Files
   become: yes
   copy:
@@ -19,7 +32,38 @@
   with_items:
     - id_rsa
     - config
-    - authorized_keys 
+    - authorized_keys
+
+- name: Reapply authorized_keys (vagrant)
+  become: yes
+  shell: cat /tmp/authorized_keys >> /home/vagrant/.ssh/authorized_keys
+
+- name: Copy vimrc
+  become: yes
+  copy:
+    src: files/vimrc
+    dest: /home/vagrant/.vimrc
+    owner: vagrant
+    group: vagrant
+    mode: 0644
+
+- name: Copy bashrc
+  become: yes
+  copy:
+    src: files/bashrc
+    dest: /home/vagrant/.bashrc
+    owner: vagrant
+    group: vagrant
+    mode: 0644
+
+- name: Copy env file
+  become: yes
+  copy:
+    src: files/env10.sh
+    dest: /home/vagrant/env10.sh
+    owner: vagrant
+    group: vagrant
+    mode: 0755
 
 - name: Ensure SSH Directories
   become: yes

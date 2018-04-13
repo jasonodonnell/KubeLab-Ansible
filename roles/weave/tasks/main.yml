@@ -1,0 +1,11 @@
+---
+- name: Apply Weave Overlay
+  command: kubectl apply -f {{ overlay_url }}{{ kubectl_version.stdout }}
+  args:
+    creates: /etc/.overlay
+  when: overlay == 'weave'
+
+- name: Block Overlay
+  become: yes
+  command: touch /etc/.overlay
+  when: overlay == 'weave'

@@ -1,0 +1,21 @@
+---
+- name: Copy Flannel
+  become: yes
+  copy:
+    src: files/flannel.yml
+    dest: /home/vagrant/flannel.yml
+    owner: vagrant
+    group: vagrant
+    mode: 0644
+  when: overlay == 'flannel'
+
+- name: Apply Flannel Overlay
+  command: kubectl apply -f /home/vagrant/flannel.yml
+  args:
+    creates: /etc/.overlay
+  when: overlay == 'flannel'
+
+- name: Block Overlay
+  become: yes
+  command: touch /etc/.overlay
+  when: overlay == 'flannel'

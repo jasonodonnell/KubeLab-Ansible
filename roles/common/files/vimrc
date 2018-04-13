@@ -1,0 +1,13 @@
+syntax on
+set nowrap
+set tabstop=4
+set sw=4
+set expandtab
+set maxmempattern=5000
+colors koehler
+autocmd FileType pl,pm,xml autocmd BufWritePre <buffer> :%s/\s\+$//e
+autocmd FileType yaml setlocal cursorcolumn
+filetype plugin on
+
+highlight ColorColumn ctermbg=magenta
+call matchadd('ColorColumn', '\%81v', 100)
