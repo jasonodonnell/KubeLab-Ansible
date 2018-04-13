@@ -8,15 +8,6 @@
     group: vagrant
     mode: 0700
 
-- name: Ensure Authorized Keys
-  become: yes
-  file:
-    path: /home/vagrant/.ssh/authorized_keys
-    state: file
-    owner: vagrant
-    group: vagrant
-    mode: 0600
-
 - name: Make copy of current authorized_keys (vagrant)
   become: yes
   command: cp /home/vagrant/.ssh/authorized_keys /tmp/authorized_keys

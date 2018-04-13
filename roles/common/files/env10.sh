@@ -17,3 +17,5 @@ export CCP_NFS_IP=192.168.2.20
 export CCP_STORAGE_MODE=ReadWriteMany
 export CCP_STORAGE_CAPACITY=400M
 export REPLACE_CCP_IMAGE_PREFIX=crunchydata
+
+go get github.com/blang/expenv

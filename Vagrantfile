@@ -4,6 +4,14 @@
 # Specify minimum Vagrant version and Vagrant API version
 VAGRANTFILE_API_VERSION = "2"
 
+system("
+    if [[ #{ARGV[0]} = 'up' ]]
+    then
+        echo 'Running setup.sh..'
+        ./setup.sh
+    fi
+")
+
 # Create boxes
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ssh_pub_key = File.readlines("./keys/id_rsa.pub").first.strip

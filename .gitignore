@@ -3,3 +3,6 @@
 .DS_Store
 *.swp
 doc/.DS_Store
+./keys/*
+./roles/common/files/id_rsa
+./roles/common/files/authorized_keys
