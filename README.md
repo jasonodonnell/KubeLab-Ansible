@@ -1,5 +1,10 @@
 # Kubernetes Deployment
 
+Built on:
+
+* Ansible 2.4
+* Vagrant 2.0.3
+
 This deployment requires `vagrant-hostmanager` plugin:
 
 ```bash
