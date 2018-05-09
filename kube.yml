@@ -1,22 +1,33 @@
 ---
-- hosts: nfs-server
-  vars:
-    nfs_export_ip: "192.168.2.0/24"
+- hosts: all
   roles:
   - common
-  - nfs-server
+
+- hosts: gluster-servers
+  roles:
+  - gluster-server
+  - heketi-base
+
+- hosts: heketi-server
+  vars:
+    storage_path: "/dev/sdb"
+    admin_secret: "My Secret"
+    user_secret: "My Secret"
+  roles:
+  - heketi-server
+
+- hosts: kube-cluster
+  roles:
+  - docker
+  - kube-base
 
 - hosts: kube-masters 
   vars:
     kube_token: "e6aedd.1ffbc1ff421d950d" 
     kube_advertise: "192.168.2.21"
-    nfs_server_ip: "kube-nfs"
     overlay: "flannel"
+    user_secret: "My Secret"
   roles:
-  - common
-  - nfs-client
-  - docker
-  - kube-base
   - kube-master
   - flannel 
   - weave 
@@ -25,10 +36,5 @@
   vars:
     kube_token: "e6aedd.1ffbc1ff421d950d" 
     kube_advertise: "192.168.2.21"
-    nfs_server_ip: "kube-nfs"
   roles:
-  - common
-  - nfs-client
-  - docker
-  - kube-base
   - kube-node

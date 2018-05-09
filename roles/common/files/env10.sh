@@ -12,10 +12,9 @@ export CCP_IMAGE_TAG=$CCP_BASEOS-$CCP_PG_FULLVERSION-$CCP_VERSION
 export CCPROOT=$GOPATH/src/github.com/crunchydata/crunchy-containers
 export CCP_CLI=kubectl
 export CCP_NAMESPACE=demo
-export CCP_STORAGE_PATH=/nfsfileshare
-export CCP_NFS_IP=192.168.2.20
 export CCP_STORAGE_MODE=ReadWriteMany
 export CCP_STORAGE_CAPACITY=400M
+export CCP_STORAGE_CLASS=gluster-heketi
 export REPLACE_CCP_IMAGE_PREFIX=crunchydata
 
 go get github.com/blang/expenv

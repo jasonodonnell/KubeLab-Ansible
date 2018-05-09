@@ -1,0 +1,27 @@
+{
+    "clusters": [
+        {
+            "nodes": [
+{% for hostname in groups['gluster-servers'] %}
+                {
+                    "node": {
+                        "hostnames": {
+                            "manage": [
+                                "{{ hostname }}"
+                            ],
+                            "storage": [
+                                "{{ hostname }}"
+                            ]
+                        },
+                        "zone": 1
+                    },
+                    "devices": [
+                        "{{ storage_path }}"
+                    ]
+                }
+{% if not loop.last %},{% endif %}
+{%- endfor %}
+            ]
+        }
+    ]
+}

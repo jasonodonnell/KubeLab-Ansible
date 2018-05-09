@@ -17,10 +17,6 @@
   become: yes
   command: touch /etc/.kubeadminit
 
-- name: Copy Kubeconfig To Mount
-  become: yes
-  command: cp /etc/kubernetes/admin.conf /mnt/nfsfileshare
-
 - name: Copy Kubeconfig To Home
   become: yes
   command: cp /etc/kubernetes/admin.conf /home/vagrant/.kube/config
@@ -36,3 +32,15 @@
 - name: Get Kubectl Version
   shell: kubectl version | base64 | tr -d '\n'
   register: kubectl_version
+
+- name: Create storage-class definition
+  become: yes
+  template:
+    src: gluster-sc.j2
+    dest: /home/vagrant/gluster-sc.yml
+    owner: vagrant
+    group: vagrant
+    mode: 0644
+
+- name: Load Storage Class
+  command: "kubectl create -f /home/vagrant/gluster-sc.yml"

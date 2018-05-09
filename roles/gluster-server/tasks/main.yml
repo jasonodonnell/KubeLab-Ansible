@@ -1,0 +1,30 @@
+---
+- name: Install Gluster Dependencies
+  become: yes
+  yum: 
+    name: "{{ item }}"
+    state: installed
+  with_items:
+  - epel-release
+  - centos-release-gluster
+
+- name: Install Gluster
+  become: yes
+  yum:
+    name: "{{ item }}"
+    state: installed
+  with_items:
+  - glusterfs
+  - glusterfs-cli
+  - glusterfs-libs
+  - glusterfs-fuse
+  - glusterfs-server
+  
+- name: Enable and Start Glusterd
+  become: yes
+  service:
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+  with_items:
+  - glusterd

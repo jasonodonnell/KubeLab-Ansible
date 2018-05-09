@@ -1,0 +1,48 @@
+---
+- name: Ensure wheel group
+  become: yes
+  group:
+    name: wheel
+    state: present
+
+- name: Allow wheel passwordless sudo
+  become: yes 
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: Copy bashrc
+  become: yes
+  copy:
+    src: files/bashrc
+    dest: /root/.bashrc
+    owner: root 
+    group: root 
+    mode: 0644
+
+- name: Create Heketi SSH directory
+  become: yes
+  file:
+    path: "/root/.ssh"
+    state: directory
+
+- name: Create Heketi Authorized Keys
+  become: yes
+  file:
+    path: "/root/.ssh/authorized_keys"
+    state: touch
+
+- name: Copy SSH Key Files
+  become: yes
+  copy:
+    src: files/{{ item }}
+    dest: /root/.ssh/{{ item }}
+    owner: root 
+    group: root
+    mode: 0600
+  with_items:
+    - heketi
+    - authorized_keys

@@ -18,4 +18,5 @@ $ ansible-playbook -i inventory kube.yml
 ```bash
 $ vagrant ssh kube1
 $ kubectl get nodes
+$ kubectl get sc
 ```

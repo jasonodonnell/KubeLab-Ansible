@@ -1,0 +1,51 @@
+---
+- name: Install Heketi
+  become: yes
+  yum:
+    name: "{{ item }}"
+    state: installed
+  with_items:
+  - heketi
+  - heketi-client
+
+- name: Alter Heketi Service File
+  become: yes
+  lineinfile:
+    path: /usr/lib/systemd/system/heketi.service
+    regexp: '^User='
+    line: 'User=root'
+
+- name: Reload systemd
+  become: yes
+  systemd: daemon_reload=yes
+
+- name: Create topology.json
+  become: yes
+  template:
+    src: topology.j2
+    dest: /etc/heketi/topology.json
+    owner: root 
+    group: root
+    mode: 0644
+
+- name: Create heketi.json
+  become: yes
+  template:
+    src: heketi.j2
+    dest: /etc/heketi/heketi.json
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable and Start Heketi
+  become: yes
+  service:
+    name: "heketi"
+    enabled: yes
+    state: started
+
+- name: Load Heketi Topology
+  become: yes
+  shell: "heketi-cli topology load --json=/etc/heketi/topology.json"
+  environment:
+    HEKETI_CLI_SERVER: http://{{ ansible_hostname }}:8080

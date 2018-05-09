@@ -73,6 +73,7 @@
   - git
   - net-tools
   - bind-utils
+  - vim
 
 - name: Disable and Stop Firewalld
   become: yes
