@@ -29,7 +29,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             vb.memory = "512"
             vb.gui = false
             unless File.exist?(DISK_NAME)
-                vb.customize ['createhd', '--filename', DISK_NAME, '--variant', 'Fixed', '--size', 15 * 1024]
+                vb.customize ['createhd', '--filename', DISK_NAME, '--variant', 'Fixed', '--size', 5 * 1024]
             end
             vb.customize ['storageattach', :id,  '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', DISK_NAME]
         end
@@ -54,7 +54,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             vb.memory = "512"
             vb.gui = false
             unless File.exist?(DISK_NAME)
-                vb.customize ['createhd', '--filename', DISK_NAME, '--variant', 'Fixed', '--size', 15 * 1024]
+                vb.customize ['createhd', '--filename', DISK_NAME, '--variant', 'Fixed', '--size', 5 * 1024]
             end
             vb.customize ['storageattach', :id,  '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', DISK_NAME]
         end
@@ -79,7 +79,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             vb.memory = "512"
             vb.gui = false
             unless File.exist?(DISK_NAME)
-                vb.customize ['createhd', '--filename', DISK_NAME, '--variant', 'Fixed', '--size', 15 * 1024]
+                vb.customize ['createhd', '--filename', DISK_NAME, '--variant', 'Fixed', '--size', 5 * 1024]
             end
             vb.customize ['storageattach', :id,  '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', DISK_NAME]
         end
