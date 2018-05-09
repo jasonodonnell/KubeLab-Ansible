@@ -12,8 +12,8 @@
   become: yes
   lineinfile:
     path: /usr/lib/systemd/system/heketi.service
-    regexp: '^User='
-    line: 'User=root'
+    regexp: "^User="
+    line: "User=root"
 
 - name: Reload systemd
   become: yes
