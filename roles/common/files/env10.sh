@@ -18,3 +18,5 @@ export CCP_STORAGE_CLASS=gluster-heketi
 export REPLACE_CCP_IMAGE_PREFIX=crunchydata
 
 go get github.com/blang/expenv
+# kubectl create namespace demo
+# kubectl config set-context $(kubectl config current-context) --namespace=demo
