@@ -15,6 +15,13 @@
     regexp: "^User="
     line: "User=root"
 
+- name: Alter Heketi Service File
+  become: yes
+  lineinfile:
+    path: /usr/lib/systemd/system/heketi.service
+    regexp: "^ExecStart=/usr/bin/heketi -config=/etc/heketi/heketi.json"
+    line: "ExecStart=/usr/bin/heketi --config=/etc/heketi/heketi.json"
+
 - name: Reload systemd
   become: yes
   systemd: daemon_reload=yes
