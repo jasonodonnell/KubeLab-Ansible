@@ -29,10 +29,10 @@
 - name: Install Kubernetes
   become: yes
   yum: 
-    name: "{{ item }}"
+    name: "{{ item }}-{{ kube_version}}"
     state: installed
   with_items:
-  - kubelet 
+  - kubelet
   - kubectl
   - kubeadm
 

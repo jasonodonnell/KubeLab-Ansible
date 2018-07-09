@@ -1,4 +1,19 @@
 ---
+- name: Ensure Correct cGroup
+  become: yes
+  lineinfile:
+    dest: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+    state: present
+    regexp: '^Environment="KUBELET_KUBECONFIG_ARGS='
+    line: 'Environment="KUBELET_KUBECONFIG_ARGS=--cgroup-driver=systemd --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf"'
+  when: overlay == 'flannel'
+
+- name: Restart Kubelet
+  become: yes
+  service:
+    name: "kubelet"
+    state: restarted
+
 - name: Run kubeadm init with Weave Overlay
   become: yes
   command: kubeadm init --token={{ kube_token }} --apiserver-advertise-address={{ kube_advertise }}

@@ -17,6 +17,8 @@
   - heketi-server
 
 - hosts: kube-cluster
+  vars:
+    kube_version: "1.10.5"
   roles:
   - docker
   - kube-base
