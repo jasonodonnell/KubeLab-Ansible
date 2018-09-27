@@ -6,19 +6,8 @@ ansible_become_pass=vagrant
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [all]
-192.168.2.15
-192.168.2.16
-192.168.2.17
 192.168.2.21
 192.168.2.22
-
-[gluster-servers]
-192.168.2.15
-192.168.2.16
-192.168.2.17
-
-[heketi-server]
-192.168.2.15
 
 [kube-cluster]
 192.168.2.21

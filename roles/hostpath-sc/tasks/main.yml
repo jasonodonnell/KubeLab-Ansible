@@ -1,0 +1,18 @@
+---
+- name: Copy hostpath-sc.yml
+  become: yes
+  copy:
+    src: files/hostpath-sc.yml
+    dest: /tmp/hostpath-sc.yml
+    owner: vagrant
+    group: vagrant
+    mode: 0400
+
+- name: Deploy HostPath SC
+  command: kubectl create -f /tmp/hostpath-sc.yml
+  args:
+    creates: /etc/.kubehostpathsc
+
+- name: Block HostPath SC
+  become: yes
+  command: touch /etc/.kubehostpathsc

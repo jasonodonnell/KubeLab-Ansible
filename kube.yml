@@ -3,19 +3,6 @@
   roles:
   - common
 
-- hosts: gluster-servers
-  roles:
-  - gluster-server
-  - heketi-base
-
-- hosts: heketi-server
-  vars:
-    storage_path: "/dev/sdb"
-    admin_secret: "My Secret"
-    user_secret: "My Secret"
-  roles:
-  - heketi-server
-
 - hosts: kube-cluster
   vars:
     kube_version: "1.10.5"
@@ -28,7 +15,6 @@
     kube_token: "e6aedd.1ffbc1ff421d950d" 
     kube_advertise: "192.168.2.21"
     overlay: "flannel"
-    user_secret: "My Secret"
   roles:
   - kube-master
   - flannel 
@@ -40,3 +26,11 @@
     kube_advertise: "192.168.2.21"
   roles:
   - kube-node
+
+- hosts: kube-nodes
+  roles:
+  - hostpath-sc-worker
+
+- hosts: kube-masters
+  roles:
+  - hostpath-sc

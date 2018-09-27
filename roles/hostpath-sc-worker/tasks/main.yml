@@ -1,0 +1,9 @@
+---
+- name: Add HostPath SC Directory
+  become: yes
+  file:
+    path: /mnt/kubernetes-pv-manual
+    state: directory
+    owner: root
+    group: root
+    mode: 0777
