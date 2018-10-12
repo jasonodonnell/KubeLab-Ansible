@@ -3,10 +3,18 @@
   roles:
   - common
 
+- hosts: nfs-server
+  vars:
+    nfs_export_ip: "192.168.2.0/24"
+  roles:
+  - nfs-server
+
 - hosts: kube-cluster
   vars:
     kube_version: "1.10.5"
+    nfs_server_ip: "kube-nfs"
   roles:
+  - nfs-client
   - docker
   - kube-base
 

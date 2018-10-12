@@ -1,0 +1,54 @@
+---
+- name: Create nfsnobody Group
+  become: yes
+  group:
+    name: nfsnobody
+    gid: 65534
+    state: present
+
+- name: Create nfsnobody User
+  become: yes
+  user:
+    name: nfsnobody
+    comment: "NFS user"
+    uid: 65534
+    group: nfsnobody
+
+- name: Ensure SSH Directories
+  become: yes
+  file:
+    path: /mnt/nfsfileshare
+    state: directory
+    owner: nfsnobody
+    group: nfsnobody
+    mode: 0777
+
+- name: Install NFS Server Packages
+  become: yes
+  yum: 
+    name: "{{ item }}"
+    state: installed
+  with_items:
+  - nfs-utils
+  - libnfsidmap
+
+- name: Enable NFS-Client
+  become: yes
+  service:
+    name: "rpcbind"
+    enabled: yes
+
+- name: Start NFS-Client
+  become: yes
+  service:
+    name: "rpcbind"
+    state: started
+
+- name: Mount NFS
+  become: yes
+  mount: 
+    src: "{{ nfs_server_ip }}:/nfsfileshare"
+    name: /mnt/nfsfileshare
+    fstype: nfs
+    opts: "rw,hard,intr,auto"
+    state: mounted
