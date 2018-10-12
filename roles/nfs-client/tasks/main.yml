@@ -17,7 +17,7 @@
 - name: Ensure SSH Directories
   become: yes
   file:
-    path: /mnt/nfsfileshare
+    path: /nfsfileshare
     state: directory
     owner: nfsnobody
     group: nfsnobody
@@ -48,7 +48,7 @@
   become: yes
   mount: 
     src: "{{ nfs_server_ip }}:/nfsfileshare"
-    name: /mnt/nfsfileshare
+    name: /nfsfileshare
     fstype: nfs
     opts: "rw,hard,intr,auto"
     state: mounted
