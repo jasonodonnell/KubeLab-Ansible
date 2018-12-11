@@ -57,7 +57,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             sudo echo #{ssh_pub_key} >> /home/vagrant/.ssh/authorized_keys
             sudo grep -v '^127.0.0.1' /etc/hosts > /tmp/hosts
             sudo echo "127.0.0.1   localhost localhost.localdomain" >> /tmp/hosts
-            sudo mv /tmp/hosts /etc/host
+            sudo mv /tmp/hosts /etc/hosts
             sudo chmod 644 /etc/hosts
         SHELL
     end
@@ -77,7 +77,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             sudo echo #{ssh_pub_key} >> /home/vagrant/.ssh/authorized_keys
             sudo grep -v '^127.0.0.1' /etc/hosts > /tmp/hosts
             sudo echo "127.0.0.1   localhost localhost.localdomain" >> /tmp/hosts
-            sudo mv /tmp/hosts /etc/host
+            sudo mv /tmp/hosts /etc/hosts
             sudo chmod 644 /etc/hosts
         SHELL
     end
