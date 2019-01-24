@@ -29,12 +29,8 @@
 - name: Install Kubernetes
   become: yes
   yum: 
-    name: "{{ item }}-{{ kube_version}}"
+    name: ['kubelet-{{ kube_version }}', 'kubectl-{{ kube_version }}', 'kubeadm-{{ kube_version }}']
     state: installed
-  with_items:
-  - kubelet
-  - kubectl
-  - kubeadm
 
 - name: Copy k8s.conf
   become: yes
@@ -73,23 +69,14 @@
   shell: >
     sysctl --system
 
-- name: Install Gluster Dependencies
+- name: Install Bash Completion
   become: yes
   yum:
-    name: "{{ item }}"
+    name: bash-completion
     state: installed
-  with_items:
-  - epel-release
-  - centos-release-gluster
 
-- name: Install Gluster
-  become: yes
-  yum:
-    name: "{{ item }}"
-    state: installed
-  with_items:
-  - glusterfs
-  - glusterfs-cli
-  - glusterfs-fuse
-  - glusterfs-server
-  - heketi-client
+- name: Add Kubectl Bash Completion
+  lineinfile:
+    path: /home/vagrant/.bashrc
+    line: 'source <(kubectl completion bash)'
+    insertbefore: EOF

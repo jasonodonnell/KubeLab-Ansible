@@ -50,8 +50,8 @@
 - name: Copy env file
   become: yes
   copy:
-    src: files/env10.sh
-    dest: /home/vagrant/env10.sh
+    src: files/env.sh
+    dest: /home/vagrant/env.sh
     owner: vagrant
     group: vagrant
     mode: 0755
@@ -65,15 +65,23 @@
     group: vagrant
     mode: 0400
 
+- name: Install EPEL
+  become: yes
+  yum:
+    name: "{{ epel_url }}"
+    state: installed
+
+- name: Yum Update
+  become: yes
+  yum:
+    name: '*'
+    state: latest
+
 - name: Install Extra Packages
   become: yes
-  yum: name={{item}} state=installed
-  with_items:
-  - golang
-  - git
-  - net-tools
-  - bind-utils
-  - vim
+  yum: 
+    name: ['golang', 'git', 'net-tools', 'bind-utils', 'vim']
+    state: installed
 
 - name: Disable and Stop Firewalld
   become: yes

@@ -26,11 +26,8 @@
 - name: Install NFS Server Packages
   become: yes
   yum: 
-    name: "{{ item }}"
+    name: ['nfs-utils', 'libnfsidmap']
     state: installed
-  with_items:
-  - nfs-utils
-  - libnfsidmap
 
 - name: Create NFS Exports
   become: yes

@@ -1,11 +1,17 @@
 ---
+- name: Add Docker Repo
+  become: yes
+  yum_repository:
+    name: docker-ce
+    description: Docker CE Repo
+    baseurl: https://download.docker.com/linux/centos/7/x86_64/stable/
+    gpgkey: https://download.docker.com/linux/centos/gpg
+
 - name: Install Docker
   become: yes
   yum: 
-    name: "{{ item }}"
+    name: "docker-ce-{{ docker_version }}"
     state: installed
-  with_items:
-  - docker
 
 - name: Ensure Docker Group
   become: yes
