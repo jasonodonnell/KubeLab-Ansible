@@ -6,8 +6,12 @@ ansible_become_pass=vagrant
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [all]
+192.168.2.20
 192.168.2.21
 192.168.2.22
+
+[nfs-server]
+192.168.2.20
 
 [kube-cluster]
 192.168.2.21
