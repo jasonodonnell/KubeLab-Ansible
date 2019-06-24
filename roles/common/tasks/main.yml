@@ -2,67 +2,75 @@
 - name: Ensure SSH Directories
   become: yes
   file:
-    path: /home/vagrant/.ssh
+    path: "/home/{{ user }}/.ssh"
     state: directory
-    owner: vagrant
-    group: vagrant
+    owner: "{{ user }}"
+    group: "{{ user }}"
     mode: 0700
 
-- name: Make copy of current authorized_keys (vagrant)
+- name: Make copy of current authorized_keys ({{ user }})
   become: yes
-  command: cp /home/vagrant/.ssh/authorized_keys /tmp/authorized_keys
+  command: "cp /home/{{ user }}/.ssh/authorized_keys /tmp/authorized_keys"
 
 - name: Copy SSH Key Files
   become: yes
   copy:
     src: files/{{ item }}
-    dest: /home/vagrant/.ssh/{{ item }}
-    owner: vagrant
-    group: vagrant
+    dest: "/home/{{ user }}/.ssh/{{ item }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
     mode: 0600
   with_items:
     - id_rsa
-    - config
     - authorized_keys
 
-- name: Reapply authorized_keys (vagrant)
+- name: Setup SSH config
   become: yes
-  shell: cat /tmp/authorized_keys >> /home/vagrant/.ssh/authorized_keys
+  template:
+    src: config.j2
+    dest: "/home/{{ user }}/.ssh/config"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0600
+
+- name: Reapply authorized_keys ({{ user }})
+  become: yes
+  shell: "cat /tmp/authorized_keys >> /home/{{ user }}/.ssh/authorized_keys"
 
 - name: Copy vimrc
   become: yes
   copy:
     src: files/vimrc
-    dest: /home/vagrant/.vimrc
-    owner: vagrant
-    group: vagrant
+    dest: "/home/{{ user }}/.vimrc"
+    owner: "{{ user }}"
+    group: "{{ user }}"
     mode: 0644
 
 - name: Copy bashrc
   become: yes
   copy:
     src: files/bashrc
-    dest: /home/vagrant/.bashrc
-    owner: vagrant
-    group: vagrant
+    dest: "/home/{{ user }}/.bashrc"
+    owner: "{{ user }}"
+    group: "{{ user }}"
     mode: 0644
 
 - name: Copy env file
   become: yes
   copy:
     src: files/env.sh
-    dest: /home/vagrant/env.sh
-    owner: vagrant
-    group: vagrant
+    dest: "/home/{{ user }}/env.sh"
+    owner: "{{ user }}"
+    group: "{{ user }}"
     mode: 0755
 
 - name: Ensure SSH Directories
   become: yes
   file:
-    path: /home/vagrant/.ssh/id_rsa
+    path: "/home/{{ user }}/.ssh/id_rsa"
     state: file
-    owner: vagrant
-    group: vagrant
+    owner: "{{ user }}"
+    group: "{{ user }}"
     mode: 0400
 
 - name: Install EPEL

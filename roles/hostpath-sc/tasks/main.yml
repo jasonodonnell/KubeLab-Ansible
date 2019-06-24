@@ -4,8 +4,8 @@
   copy:
     src: files/hostpath-sc.yml
     dest: /tmp/hostpath-sc.yml
-    owner: vagrant
-    group: vagrant
+    owner: "{{ user }}"
+    group: "{{ user }}"
     mode: 0400
 
 - name: Deploy HostPath SC

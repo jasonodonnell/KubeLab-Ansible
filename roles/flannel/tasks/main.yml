@@ -3,14 +3,14 @@
   become: yes
   copy:
     src: files/flannel.yml
-    dest: /home/vagrant/flannel.yml
-    owner: vagrant
-    group: vagrant
+    dest: "/home/{{ user }}/flannel.yml"
+    owner: "{{ user }}"
+    group: "{{ user }}"
     mode: 0644
   when: overlay == 'flannel'
 
 - name: Apply Flannel Overlay
-  command: kubectl apply -f /home/vagrant/flannel.yml
+  command: "kubectl apply -f /home/{{ user }}/flannel.yml"
   args:
     creates: /etc/.overlay
   when: overlay == 'flannel'

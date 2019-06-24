@@ -17,6 +17,3 @@ man() {
         LESS_TERMCAP_us=$(printf "\e[1;32m") \
             man "$@"
 }
-
-# User specific aliases and functions
-export GOPATH=/home/vagrant/cdev

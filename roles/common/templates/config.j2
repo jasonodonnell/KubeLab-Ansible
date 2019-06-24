@@ -1,14 +1,14 @@
 Host kube-nfs
-    User vagrant
+    User {{ user }}
     HostName kube-nfs
     IdentityFile ~/.ssh/id_rsa
 
 Host kube1
-    User vagrant
+    User {{ user }}
     HostName kube1
     IdentityFile ~/.ssh/id_rsa
 
 Host kube2
-    User vagrant
+    User {{ user }}
     HostName kube2
     IdentityFile ~/.ssh/id_rsa

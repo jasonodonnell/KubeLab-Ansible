@@ -34,14 +34,14 @@
 
 - name: Copy Kubeconfig To Home
   become: yes
-  command: cp /etc/kubernetes/admin.conf /home/vagrant/.kube/config
+  command: "cp /etc/kubernetes/admin.conf /home/{{ user }}/.kube/config"
 
 - name: Setup Config Permissions
   become: yes
   file:
-    path: /home/vagrant/.kube/config
-    owner: vagrant
-    group: vagrant
+    path: "/home/{{ user }}/.kube/config"
+    owner: "{{ user }}"
+    group: "{{ user }}"
     mode: 0644
 
 - name: Get Kubectl Version

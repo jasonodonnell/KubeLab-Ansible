@@ -43,7 +43,7 @@
 
 - name: Create .kube directory
   file:
-    path: /home/vagrant/.kube
+    path: "/home/{{ user }}/.kube"
     state: directory
     mode: 0700
 
@@ -77,6 +77,6 @@
 
 - name: Add Kubectl Bash Completion
   lineinfile:
-    path: /home/vagrant/.bashrc
+    path: "/home/{{ user }}/.bashrc"
     line: 'source <(kubectl completion bash)'
     insertbefore: EOF
